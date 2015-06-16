@@ -1,39 +1,50 @@
 package fr.studio124.circlepit;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 
 public class MainMenu extends Activity {
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        setContentView(new DrawingView(this));
     }
 
+    class DrawingView extends SurfaceView {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_menu, menu);
-        return true;
-    }
+        private final SurfaceHolder surfaceHolder;
+        private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        public DrawingView(Context context) {
+            super(context);
+            surfaceHolder = getHolder();
+            paint.setColor(Color.RED);
+            paint.setStyle(Paint.Style.FILL);
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (surfaceHolder.getSurface().isValid()) {
+                    Canvas canvas = surfaceHolder.lockCanvas();
+                    canvas.drawColor(Color.BLACK);
+                    canvas.drawCircle(event.getX(), event.getY(), 50, paint);
+                    surfaceHolder.unlockCanvasAndPost(canvas);
+                }
+            }
+            return false;
+        }
+
     }
+
 }
