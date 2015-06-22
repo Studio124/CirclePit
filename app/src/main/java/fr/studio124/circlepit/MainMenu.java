@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -30,6 +31,16 @@ public class MainMenu extends Activity {
             surfaceHolder = getHolder();
             paint.setColor(Color.RED);
             paint.setStyle(Paint.Style.FILL);
+            initCircle();
+        }
+
+        public void initCircle(){
+            if (surfaceHolder.getSurface().isValid()) {
+                Canvas canvas = surfaceHolder.lockCanvas();
+                canvas.drawColor(Color.BLACK);
+                canvas.drawCircle(canvas.getWidth()/2, canvas.getHeight()/2, 30, paint);
+                surfaceHolder.unlockCanvasAndPost(canvas);
+            }
         }
 
         @Override
@@ -43,6 +54,15 @@ public class MainMenu extends Activity {
                 }
             }
             return false;
+        }
+
+        public void moveButton(int x, int y){
+            if (surfaceHolder.getSurface().isValid()) {
+                Canvas canvas = surfaceHolder.lockCanvas();
+                canvas.drawColor(Color.BLACK);
+                canvas.drawCircle(x, y, 50, paint);
+                surfaceHolder.unlockCanvasAndPost(canvas);
+            }
         }
 
     }
